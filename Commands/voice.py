@@ -69,13 +69,6 @@ class Queue:
     @property
     def is_empty(self):
         return not self._queue
-
-    @property
-    def first_track(self):
-        if not self._queue:
-            raise EmptyQueue
-
-        return self._queue[0]
         
     @property
     def current_track(self):
@@ -217,7 +210,7 @@ class Player(wavelink.Player):
 
 
     async def start_playback(self):
-        await self.play(self.queue.first_track)
+        await self.play(self.queue.current_track)
 
     async def advance(self):
         try:
@@ -465,6 +458,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player.queue.set_repeat_mode(mode.lower())
         await ctx.send(f"The repeat mode has been set to {mode}")
     
+    @commands.command(name="debug")
+    async def _debug(self, ctx):
+        player = self.get_player(ctx)
+        await ctx.send(f"The position is {player.position}")
                 
     
 
