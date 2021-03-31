@@ -60,6 +60,7 @@ class Queue:
     def __init__(self):
         self._queue = []
         self.position = 0
+        self.repeat_mode = RepeatMode.NONE
 
     def add(self, *args):
         self._queue.extend(args)
@@ -77,9 +78,10 @@ class Queue:
         
     @property
     def current_track(self):
-        if not self._queue:
+        if not self._queue: 
             raise QueueIsEmpty
-        else:
+
+        if self.position <= len(self._queue) - 1:
             return self._queue[self.position]
 
     @property
@@ -248,7 +250,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
     @wavelink.WavelinkMixin.listener("on_track_exception")
     async def on_player_stop(self, node, payload):
         if payload.player.queue.repeat_mode == RepeatMode.ONE:
-            await payload.player.repeat_track
+            await payload.player.repeat_track()
         else:
             await payload.player.advance()
 
@@ -328,8 +330,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
     @_play.error
     async def _play_error(self, ctx, exc):
-        if isinstance(exc, PlayerAlrPlaying):
-            await ctx.send("Already playing")
+        if isinstance(exc, NoVoiceChannel):
+            await ctx.send("No suitable VC found or provided")
         elif isinstance(exc, QueueIsEmpty):
             await ctx.send("No songs to play as the queue is empty")
 
@@ -349,7 +351,11 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         )
         embed.set_author(name="Query Results")
         embed.set_footer(text=f"Requested by {ctx.author.name}", icon_url=ctx.author.avatar_url)
-        embed.add_field(name="Currently playing", value = player.queue.current_track.title, inline=False)
+        embed.add_field(
+            name="Currently playing", 
+            value =getattr(player.queue.current_track.title, "title", "No tracks currently playing"), 
+            inline=False
+        )
         if upcoming := player.queue.upcoming:
             embed.add_field(
                 name="Next up",
