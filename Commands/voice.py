@@ -58,6 +58,7 @@ class RepeatMode(Enum):
 #Getters/Setters
 class Queue:
     def __init__(self):
+        print("queue object made")
         self._queue = []
         self.position = 0
         self.repeat_mode = RepeatMode.NONE
