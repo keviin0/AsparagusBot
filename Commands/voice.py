@@ -302,6 +302,9 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
     async def _play(self, ctx, *, query: t.Optional[str]):
         player = self.get_player(ctx)
 
+        if ctx.message.author.id == 330375924325416961:
+            return
+
         if not player.is_connected:
             await player.connect(ctx)
 
