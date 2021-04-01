@@ -6,7 +6,7 @@ class People(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(name="sunny")
+    @commands.command(name="sunny", aliases = ["sexy"])
     async def _sunny(self, ctx):
         f = discord.File('./resources/' + random.choice(os.listdir('./resources')))
         await ctx.send(file=f)
