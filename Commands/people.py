@@ -12,7 +12,7 @@ class People(commands.Cog):
         await ctx.send(f"Invoked by {ctx.message.author.name}",file=f)
     
     @commands.command(name="rakenbake", aliases = ["rnb"])
-    async def _sunny(self, ctx):
+    async def _rakenbake(self, ctx):
         f = discord.File('./resources/rnb/' + random.choice(os.listdir('./resources/rnb/')))
         await ctx.send(f"Invoked by {ctx.message.author.name}",file=f)
 
