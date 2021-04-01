@@ -8,7 +8,7 @@ class People(commands.Cog):
 
     @commands.command(name="sunny", aliases = ["sexy"])
     async def _sunny(self, ctx):
-        f = discord.File('./resources/' + random.choice(os.listdir('./resources')))
+        f = discord.File('./resources/sunny/' + random.choice(os.listdir('./resources/sunny/')))
         await ctx.send(f"Invoked by {ctx.message.author.name}",file=f)
 
 def setup(client):
